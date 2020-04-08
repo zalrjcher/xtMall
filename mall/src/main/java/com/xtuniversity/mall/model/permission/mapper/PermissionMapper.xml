@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xtuniversity.mall.model.permission.entity.Permission">
+	<resultMap id="resultMap" type="com.xtuniversity.mall.model.permission.entity.Permission">
+		<id column="id" property="id" />
+		<result column="level" property="level" />
+		<result column="grade" property="grade" />
+		<result column="paret_id" property="paretId" />
+		<result column="name" property="name" />
+		<result column="url" property="url" />
+	</resultMap>
+
+	<!-- 插入操作 -->
+	<insert id="add" parameterType="com.xtuniversity.mall.model.permission.entity.Permission"  useGeneratedKeys="true" keyProperty="id">
+		insert into xt_permission
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="level != null">
+				level,
+			</if>
+			<if test="grade != null">
+				grade,
+			</if>
+			<if test="paretId != null">
+				paret_id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="id != null">
+				id,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+		</trim>
+     <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="level != null">
+				#{level},
+			</if>
+			<if test="grade != null">
+				#{grade},
+			</if>
+			<if test="paretId != null">
+				#{paretId},
+			</if>
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="url != null">
+				#{url},
+			</if>
+	 </trim>
+	</insert>
+
+	<!-- 删除操作 -->
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM xt_permission WHERE id = #{id} 
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteIn" parameterType="java.util.List">
+		DELETE FROM xt_permission WHERE id IN 
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+			#{item}	
+		</foreach>  
+	</delete>
+
+	<!-- 修改操作 -->
+	<update id="update" parameterType="com.xtuniversity.mall.model.permission.entity.Permission">
+		update xt_permission set name=#{name},url=#{url},level=#{level},grade=#{grade},paret_id=#{paretId} where id = #{id}
+	</update>
+	
+	<!-- 审核操作 -->
+	<update id="auditing" parameterType="map">
+		update xt_permission set status=#{status} where id IN 
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>  
+	</update>
+	<!-- 审核操作 -->
+	<update id="recommend" parameterType="map">
+		update xt_permission set recommend= #{status} where id IN 
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>  
+	</update>
+
+	<!-- 根据id查询 -->
+	<select id="findById" parameterType="java.lang.Long" resultMap="resultMap">
+		select * from xt_permission where id=#{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="findAll" resultMap="resultMap">
+		select * from xt_permission ORDER BY id desc
+	</select>
+	
+	<!-- 查询所有符合条件的 -->
+	<select id="findAllByParam" resultMap="resultMap" parameterType="map">
+		select * from xt_permission <include refid="base_where" />
+	</select>
+
+	<!-- 总页数 -->
+	<select id="findTotal" resultType="int" parameterType="map">
+		select count(*) from xt_permission <include refid="base_where" />
+	</select>
+	
+	<!-- 根据条件查询对象 -->
+	<select id="findByParam" resultMap="resultMap" parameterType="map">
+		select * from xt_permission <include refid="base_where" /> limit 1
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="findPage" resultMap="resultMap" parameterType="map">
+		SELECT * FROM xt_permission <include refid="base_where" />
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+		LIMIT #{showPages}, #{pageSize}
+	</select>
+
+	<!-- 提取公共WHERE -->
+	<sql id="base_where">
+		<where>
+			<if test="level != null">
+				AND level = #{level}
+			</if>
+			<if test="grade != null">
+				AND grade = #{grade}
+			</if>
+			<if test="paretId != null">
+				AND paret_id = #{paretId}
+			</if>
+			<if test="name != null">
+				AND name = #{name}
+			</if>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="url != null">
+				AND url = #{url}
+			</if>
+		</where>
+	</sql>
+</mapper>    

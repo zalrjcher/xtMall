@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"     
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xtuniversity.mall.model.order.entity.Order">
+	<resultMap id="resultMap" type="com.xtuniversity.mall.model.order.entity.Order">
+		<id column="id" property="id" />
+		<result column="number" property="number" />
+		<result column="commodity_id" property="commodityId" />
+		<result column="user_id" property="userId" />
+		<result column="createTime" property="createTime" />
+		<result column="price" property="price" />
+		<result column="address_id" property="addressId" />
+		<result column="state" property="state" />
+	</resultMap>
+
+	<!-- 插入操作 -->
+	<insert id="add" parameterType="com.xtuniversity.mall.model.order.entity.Order"  useGeneratedKeys="true" keyProperty="id">
+		insert into xt_order
+		 <trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="number != null">
+				number,
+			</if>
+			<if test="commodityId != null">
+				commodity_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="createTime != null">
+				createTime,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="addressId != null">
+				address_id,
+			</if>
+			<if test="id != null">
+				id,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+		</trim>
+     <trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="number != null">
+				#{number},
+			</if>
+			<if test="commodityId != null">
+				#{commodityId},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="price != null">
+				#{price},
+			</if>
+			<if test="addressId != null">
+				#{addressId},
+			</if>
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="state != null">
+				#{state},
+			</if>
+	 </trim>
+	</insert>
+
+	<!-- 删除操作 -->
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM xt_order WHERE id = #{id} 
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteIn" parameterType="java.util.List">
+		DELETE FROM xt_order WHERE id IN 
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+			#{item}	
+		</foreach>  
+	</delete>
+
+	<!-- 修改操作 -->
+	<update id="update" parameterType="com.xtuniversity.mall.model.order.entity.Order">
+		update xt_order set commodity_id=#{commodityId},user_id=#{userId},state=#{state},number=#{number},price=#{price},createTime=#{createTime},address_id=#{addressId} where id = #{id}
+	</update>
+	
+	<!-- 审核操作 -->
+	<update id="auditing" parameterType="map">
+		update xt_order set status=#{status} where id IN 
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>  
+	</update>
+	<!-- 审核操作 -->
+	<update id="recommend" parameterType="map">
+		update xt_order set recommend= #{status} where id IN 
+        <foreach item="item" collection="ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>  
+	</update>
+
+	<!-- 根据id查询 -->
+	<select id="findById" parameterType="java.lang.Long" resultMap="resultMap">
+		select * from xt_order where id=#{id}
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="findAll" resultMap="resultMap">
+		select * from xt_order ORDER BY id desc
+	</select>
+	
+	<!-- 查询所有符合条件的 -->
+	<select id="findAllByParam" resultMap="resultMap" parameterType="map">
+		select * from xt_order <include refid="base_where" />
+	</select>
+
+	<!-- 总页数 -->
+	<select id="findTotal" resultType="int" parameterType="map">
+		select count(*) from xt_order <include refid="base_where" />
+	</select>
+	
+	<!-- 根据条件查询对象 -->
+	<select id="findByParam" resultMap="resultMap" parameterType="map">
+		select * from xt_order <include refid="base_where" /> limit 1
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="findPage" resultMap="resultMap" parameterType="map">
+		SELECT * FROM xt_order <include refid="base_where" />
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+		LIMIT #{showPages}, #{pageSize}
+	</select>
+
+	<!-- 提取公共WHERE -->
+	<sql id="base_where">
+		<where>
+			<if test="number != null">
+				AND number = #{number}
+			</if>
+			<if test="commodityId != null">
+				AND commodity_id = #{commodityId}
+			</if>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="createTime != null">
+				AND createTime = #{createTime}
+			</if>
+			<if test="price != null">
+				AND price = #{price}
+			</if>
+			<if test="addressId != null">
+				AND address_id = #{addressId}
+			</if>
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="state != null">
+				AND state = #{state}
+			</if>
+		</where>
+	</sql>
+</mapper>    
