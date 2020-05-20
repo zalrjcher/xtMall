@@ -983,6 +983,11 @@ public class APIController extends BaseController {
         Complaint complaint1 = complaintService.getComplanitById(complaintId);
         complaint1.setState(state);
         complaintService.update(complaint1);
+        if(state==2){
+            User user = userService.getUserById(complaint1.getUserId());
+            user.setComCount(user.getComCount()+1);
+            userService.updateUser(user);
+        }
         List<Complaint> complaintList =  complaintService.getAll();
         List<Complaint> complaintList1= new ArrayList<>();
         for(Complaint complaint:complaintList){
@@ -1005,6 +1010,49 @@ public class APIController extends BaseController {
         resultObject.put("complaintList",list);
         return ResultObject.SUCCESS(resultObject).toJsonString();
     }
+
+
+    /**
+     * 获取谁购买了我的东西
+     * @param requestData
+     * @return
+     */
+    @PostMapping("getByMy")
+    public String  getByMy(@RequestBody String requestData){
+        JSONObject requestObject = JSONObject.parseObject(requestData);
+        String token = requestObject.getString("token");
+        long userId = requestObject.getLong("userId");
+        if (!checkToken(token, userId)) {
+            return ResultObject.ERROR(ErrorCode.tokenError.code(), ErrorCode.tokenError.value()).toJsonString();
+        }
+        JSONObject resultObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        List<Commodity> commodityList = commodityService.getCommodityByUserId(userId);
+        List<Order> orderList = new ArrayList<>();
+        for ( Commodity commodity :commodityList){
+            List<Order> orders = orderService.getOrderByCommodityId(commodity);
+            orderList.addAll(orders);
+        }
+        for (Order order:orderList){
+            if (order.getState()<1){
+                continue;
+            }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("byTime",order.getCreateTime());
+            jsonObject.put("byNum",order.getNumber());
+            jsonObject.put("allMoney",order.getPrice());
+            Commodity commodity =  commodityService.getCommodityById(order.getCommodityId());
+            jsonObject.put("commodityName",commodity.getName());
+            jsonObject.put("commodityImg",commodity.getImage());
+            User user = userService.getUserById(order.getUserId());
+            jsonObject.put("nickName",user.getNick());
+            jsonArray.add(jsonObject);
+        }
+        resultObject.put("byMyList",jsonArray);
+        return ResultObject.SUCCESS(resultObject).toJsonString();
+    }
+
+
     /**
      * 图片上传
      *

@@ -18,6 +18,7 @@ import EditGood from '@/components/personPage/editGood'
 import ReGoodBill from '@/components/personPage/reGoodBill'
 import EvaBill from '@/components/personPage/EvaBill'
 import UserManage from '@/components/personPage/userManage'
+import ByMy from '@/components/personPage/buMy'
 import AllGood from '@/components/mallPage/allGood'
 import BuyPage from '@/components/util/BuyPage'
 import ShopCart from '@/components/mallPage/shopCart'
@@ -119,6 +120,11 @@ export default new Router({
               path: '/userManage',
               name: 'UserManage',
               component: UserManage,
+            },
+            {
+              path: '/byMy',
+              name: 'ByMy',
+              component: ByMy,
             },
             {
               path: '/address',

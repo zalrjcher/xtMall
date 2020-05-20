@@ -15,7 +15,7 @@
         name: "Advertisement",
       data(){
           return {
-            images:["/static/huawei.webp","/static/mi.webp","/static/hp.webp","/static/xiezi.webp"]
+            images:["/static/bao.webp","/static/meizhuang.webp","/static/nvxie.webp","/static/nvzhuang.jpg"]
         }
       }
     }

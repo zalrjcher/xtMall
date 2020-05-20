@@ -1,6 +1,7 @@
 package com.xtuniversity.mall.model.order.Service;
 
 import com.xtuniversity.mall.model.base.BaseService;
+import com.xtuniversity.mall.model.commodity.entity.Commodity;
 import com.xtuniversity.mall.model.order.dao.IOrderDao;
 import com.xtuniversity.mall.model.order.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class OrderService extends BaseService {
     public List<Order> getOrderByUserId(long userId) {
         Map<String,Object> map = new HashMap<>();
         map.put("userId",userId);
+        map.put("state",1);
         return orderDao.findAllByParam(map,new LinkedHashMap<>());
     }
 
@@ -50,6 +52,12 @@ public class OrderService extends BaseService {
         Map<String,Object> map = new HashMap<>();
         map.put("userId",userId);
         map.put("state",state);
+        return  orderDao.findAllByParam(map,new LinkedHashMap<>());
+    }
+
+    public List<Order> getOrderByCommodityId(Commodity commodity) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("commodity",commodity);
         return  orderDao.findAllByParam(map,new LinkedHashMap<>());
     }
 }

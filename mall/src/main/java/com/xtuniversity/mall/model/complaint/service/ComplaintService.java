@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zlj
@@ -34,5 +37,11 @@ public class ComplaintService extends BaseService {
 
     public void update(Complaint complaint) {
         complaintDao.update(complaint);
+    }
+
+    public List<Complaint> getComplanitByUserId(long userId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        return complaintDao.findAllByParam(map,new LinkedHashMap<>());
     }
 }

@@ -6,7 +6,7 @@
     ox-shadow: 0 3px 8px -6px rgba(0, 0, 0, .1);
     border-radius: 8px;">
     <div class="title">
-      带审核商品
+      待审核商品
     </div>
     <div style="display: flex;
     align-items: center;
