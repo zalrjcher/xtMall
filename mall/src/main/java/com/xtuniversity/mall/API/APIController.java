@@ -1044,7 +1044,7 @@ public class APIController extends BaseController {
             Commodity commodity =  commodityService.getCommodityById(order.getCommodityId());
             jsonObject.put("commodityName",commodity.getName());
             jsonObject.put("commodityImg",commodity.getImage());
-            User user = userService.getUserById(order.getUserId());
+            User user = userService.getUserByIdMast(order.getUserId());
             jsonObject.put("nickName",user.getNick());
             jsonArray.add(jsonObject);
         }

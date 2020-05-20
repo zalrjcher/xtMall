@@ -56,7 +56,7 @@ public class OrderService extends BaseService {
 
     public List<Order> getOrderByCommodityId(Commodity commodity) {
         Map<String,Object> map = new HashMap<>();
-        map.put("commodity",commodity);
+        map.put("commodityId",commodity.getId());
         return  orderDao.findAllByParam(map,new LinkedHashMap<>());
     }
 }
