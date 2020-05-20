@@ -37,7 +37,6 @@ public class OrderService extends BaseService {
     public List<Order> getOrderByUserId(long userId) {
         Map<String,Object> map = new HashMap<>();
         map.put("userId",userId);
-        map.put("state",1);
         return orderDao.findAllByParam(map,new LinkedHashMap<>());
     }
 
